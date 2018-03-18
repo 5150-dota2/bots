@@ -9,7 +9,7 @@
 4. Choose `Enable cheats` (In lobby settings)
 5. Server location `Local host` (In lobby settings)
 6. `1v1 Solo mid` as game mode (In lobby settings)
-7. `Manual` for selection priority` (In lobby settings)
+7. `Manual` for selection priority (In lobby settings)
 8. `Random` for starting team (In lobby settings)
 9. Choose `Fill empty slots with bot` (In lobby settings)
 10. Choose `Local dev script` for both sides (In lobby settings)
