@@ -26,6 +26,10 @@ MacOS address is:
 `~/Library/Application Support/Steam/steamapps/common/dota 2 beta/game/dota/scripts/vscripts/`
 
 
+## Useful cheats:
+- `sv_cheats 1` -> enable cheat
+- `host_timescale 10.0` -> speed up 10x
+
 ## Repos:
 
 https://github.com/Nostrademous/Dota2-FullOverwrite
@@ -35,6 +39,3 @@ https://github.com/furiouspuppy/Dota2_Bots
 https://github.com/lenLRX/dota2Bots
 
 
-## Useful cheats:
-- `sv_cheats 1` -> enable cheat
-- `host_timescale 10.0` -> speed up 10x
