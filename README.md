@@ -29,6 +29,10 @@ MacOS address is:
 ## Useful cheats:
 - `sv_cheats 1` -> enable cheat
 - `host_timescale 10.0` -> speed up 10x
+- `dota_bot_reload_scripts` -> reload bot script after changes
+- `dota_creeps_no_spawning 1` -> stop creeps from spawning
+- More: https://dota2.gamepedia.com/List_of_Console_Commands
+
 
 ## Repos:
 
