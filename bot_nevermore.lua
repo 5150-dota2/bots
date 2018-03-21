@@ -1,5 +1,6 @@
 local Log = require(GetScriptDirectory() .. "/log");
 local moves = require(GetScriptDirectory() .. "/bot_moves")
+local attack = require (GetScriptDirectory() .. "/bot_last_hit")
 local bot = GetBot()
 
 function Think()
@@ -21,16 +22,22 @@ time = nil
 function Act()
   local loc = bot:GetLocation()
   local m = {}
+  local a = {}
 
   for k in pairs(moves) do
     table.insert(m, k)
   end
 
+  for k in pairs(attack) do
+    table.insert(a, k)
+  end
+  --
   if not bot.lastActionTime then bot.lastActionTime = 0 end
 
-  -- Randomly pick a move
-  if RealTime() - bot.lastActionTime > 0.5 then
+  -- -- Randomly pick a move
+  if RealTime() - bot.lastActionTime > 0.01 then
     bot.lastActionTime = RealTime()
+    attack[a[1]](bot)
     moves[m[math.random(#m)]](bot)
   end
 end
