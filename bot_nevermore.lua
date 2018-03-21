@@ -24,9 +24,9 @@ function Act()
   local m = {}
   local a = {}
 
-  for k in pairs(moves) do
-    table.insert(m, k)
-  end
+  -- for k in pairs(moves) do
+  --   table.insert(m, k)
+  -- end
 
   for k in pairs(attack) do
     table.insert(a, k)
@@ -38,6 +38,6 @@ function Act()
   if RealTime() - bot.lastActionTime > 0.01 then
     bot.lastActionTime = RealTime()
     attack[a[1]](bot)
-    moves[m[math.random(#m)]](bot)
+    -- moves[m[math.random(#m)]](bot)
   end
 end
