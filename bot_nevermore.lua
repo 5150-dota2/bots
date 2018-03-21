@@ -35,7 +35,7 @@ function Act()
   if not bot.lastActionTime then bot.lastActionTime = 0 end
 
   -- -- Randomly pick a move
-  if RealTime() - bot.lastActionTime > 0.01 then
+  if RealTime() - bot.lastActionTime > 0.2 then
     bot.lastActionTime = RealTime()
     attack[a[1]](bot)
     -- moves[m[math.random(#m)]](bot)
