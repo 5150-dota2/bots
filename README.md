@@ -33,7 +33,7 @@ MacOS address is:
 - `dota_creeps_no_spawning 1` -> stop creeps from spawning
 - More: https://dota2.gamepedia.com/List_of_Console_Commands
 
-##Useful Links:
+## Useful Links:
 https://www.youtube.com/watch?v=Vz5l886eptw
 
 ## Repos:
