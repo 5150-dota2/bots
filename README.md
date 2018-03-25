@@ -4,7 +4,7 @@
 ## Quickstart:
 
 1. Clone this repo to your vscripts folder. Dota 2 will look for `bots` folder in there
-2. Create a lobby 
+2. Create a lobby
 3. Join either The Radiant or Dire as coach
 4. Choose `Enable cheats` (In lobby settings)
 5. Server location `Local host` (In lobby settings)
@@ -21,7 +21,7 @@ See this tutorial: http://ruoyusun.com/2017/01/08/dota2-ai-quickstart.html
 
 Misc:
 
-MacOS address is: 
+MacOS address is:
 
 `~/Library/Application Support/Steam/steamapps/common/dota 2 beta/game/dota/scripts/vscripts/`
 
@@ -33,6 +33,8 @@ MacOS address is:
 - `dota_creeps_no_spawning 1` -> stop creeps from spawning
 - More: https://dota2.gamepedia.com/List_of_Console_Commands
 
+##Useful Links:
+https://www.youtube.com/watch?v=Vz5l886eptw
 
 ## Repos:
 
@@ -41,5 +43,3 @@ https://github.com/Nostrademous/Dota2-FullOverwrite
 https://github.com/furiouspuppy/Dota2_Bots
 
 https://github.com/lenLRX/dota2Bots
-
-
