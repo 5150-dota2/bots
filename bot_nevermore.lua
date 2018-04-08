@@ -4,7 +4,7 @@ local attack = require (GetScriptDirectory() .. "/bot_last_hit")
 local request = require(GetScriptDirectory() .. "/request")
 local utils = require(GetScriptDirectory() .. "/utils")
 local creep_to_attack_module = require("bot_creep_to_attack")
-
+local log_closest_creep = require("bot_closest")
 local bot = GetBot()
 local enemy_hero = bot:GetNearbyHeroes(500, true, BOT_MODE_NONE)[1]
 
@@ -61,9 +61,16 @@ function Act()
   if not bot.lastHealth then bot.lastHealth = bot:GetHealth() end
   if not bot.lastEnemyHealth then bot.lastEnemyHealth = enemy_hero:GetHealth() end
   if bot.waitingRes == nil then bot.waitingRes = false end
-  if not bot.lastHit then bot.lastHit = bot:GetLastHits() end
+-- for last hits
+  if not bot.lastHit then bot.lastHit = bot:GetLastHits() end 
   if not bot.lastAlliedTowerHealth then bot.lastAlliedTowerHealth = alliedTower:GetHealth() end
   if not bot.lastEnemyTowerHealth then bot.lastEnemyTowerHealth = enemyTower:GetHealth() end
+-- for xp rewards
+  if not bot.lastxp then bot.lastxp = bot:GetXPNeededToLevel() end 
+  if not bot.lastlevel then bot.lastlevel = bot:GetLevel() end
+  --for creep blocking
+  local closest, closest_creeps,creep_loc = log_closest_creep.closest(bot)
+  if not bot.lastclosest_creeps, then bot.lastclosest_creeps = closest_creeps:GetLocation() end
 
   if #bot.actionQueue > 0 then
     local action = table.remove(bot.actionQueue, 1)
@@ -104,9 +111,27 @@ function Act()
 
     bot.lastReward = 0
 
+    --reward for creepblocking
+    local distance = (GetUnitToLocationDistance(closest_creeps,creep_loc))
+    if distance <20 then bot.lastReward = bot.lastReward +5
+      elseif distance<40 then bot.lastReward = bot.lastReward +2
+        elseif distance<60 then bot.lastReward = bot.lastReward +1
+        end
+      end
+    end
+
     -- Punish when took damage
     bot.lastReward = (bot:GetHealth() - bot.lastHealth)*7
-    bot.lastHealth = bot:GetHealth()
+    bot.lastHealth = bot:GetHealth() 
+    -- reward for leveling up
+    local level = bot:GetLevel()
+    if level >bot.lastlevel then bot.lastReward = bot.lastReward + 10 
+      bot.lastxp = bot:GetXPNeededToLevel() end
+
+    --reward for staying near xp rich areas
+    local xp = bot:GetXPNeededToLevel()
+    local xp_gained = bot.lastxp - xp
+    bot.lastReward = bot.lastReward + xp_gained*2
 
     -- Punish when allied tower takes damage
     bot.lastReward = (alliedTower:GetHealth() - bot.lastAlliedTowerHealth)*5
