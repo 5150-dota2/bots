@@ -3,8 +3,10 @@ local moves = require(GetScriptDirectory() .. "/bot_moves")
 local attack = require (GetScriptDirectory() .. "/bot_last_hit")
 local request = require(GetScriptDirectory() .. "/request")
 local utils = require(GetScriptDirectory() .. "/utils")
+local creep_to_attack_module = require("bot_creep_to_attack")
 
 local bot = GetBot()
+local enemy_hero = bot:GetNearbyHeroes(500, true, BOT_MODE_NONE)[1]
 
 function Think()
   local location = bot:GetLocation()
@@ -46,13 +48,22 @@ end
 -- example Act function that talk with machine learning server
 function Act()
   local loc = bot:GetLocation()
+  local eloc = enemy_hero:GetLocation()
+  local creep_to_attack = creep_to_attack_module.getcreep(bot)
+  local alliedTower = GetTower(bot:GetTeam(), TOWER_MID_1)
+  local enemyTower = GetTower(enemy_hero:GetTeam(), TOWER_MID_1)
+
   print(bot:GetTeam())
   if not bot.lastAction then bot.lastAction = 0 end
   if not bot.lastActionTime then bot.lastActionTime = 0 end
   if not bot.actionQueue then bot.actionQueue = {} end
   if not bot.lastReward then bot.lastReward = 0 end
   if not bot.lastHealth then bot.lastHealth = bot:GetHealth() end
+  if not bot.lastEnemyHealth then bot.lastEnemyHealth = enemy_hero:GetHealth() end
   if bot.waitingRes == nil then bot.waitingRes = false end
+  if not bot.lastHit then bot.lastHit = bot:GetLastHits() end
+  if not bot.lastAlliedTowerHealth then bot.lastAlliedTowerHealth = alliedTower:GetHealth() end
+  if not bot.lastEnemyTowerHealth then bot.lastEnemyTowerHealth = enemyTower:GetHealth() end
 
   if #bot.actionQueue > 0 then
     local action = table.remove(bot.actionQueue, 1)
@@ -63,7 +74,7 @@ function Act()
 
   if not bot.waitingRes then
     local velocity = bot:GetVelocity()
-    local facing = bot:GetVelocity()
+    local evelo = enemy_hero:GetVelocity()
     print(bot:GetAnimActivity())
     bot.waitingRes = true
     request:Send({
@@ -75,7 +86,16 @@ function Act()
       heroVelY = velocity.y,
       heroFacing = bot:GetFacing(),
       heroAnimation = bot:GetAnimActivity(),
+      enemyIsAlive = enemy_hero:IsAlive(),
+      enemyheroX = eloc.x,
+      enemyheroY = eloc.y,
+      enemyheroVelX = evelo.x,
+      enemyheroVelY = evelo.y,
+      enemyheroFacing = enemy_hero:GetFacing(),
+      enemyheroAnimation = enemy_hero:GetAnimActivity(),
+      creephealth = creep_to_attack:GetHealth(),
       health = bot:GetHealth(),
+      enemyhealth = enemy_hero:GetHealth(),
       reward = bot.lastReward
     }, function(res)
       table.insert(bot.actionQueue, res.action)
@@ -85,14 +105,30 @@ function Act()
     bot.lastReward = 0
 
     -- Punish when took damage
-    bot.lastReward = bot:GetHealth() - bot.lastHealth
+    bot.lastReward = (bot:GetHealth() - bot.lastHealth)*7
     bot.lastHealth = bot:GetHealth()
 
+    -- Punish when allied tower takes damage
+    bot.lastReward = (alliedTower:GetHealth() - bot.lastAlliedTowerHealth)*5
+    bot.lastAlliedTowerHealth = alliedTower:GetHealth()
+
+    -- Give reward on last hit
+    bot.lastReward = (bot.GetLastHits() - bot.lastHit)*5
+    bot.lastHit = bot:GetLastHits()
+
+    -- Reward for attacking the enemy hero
+    bot.Reward = (bot.lastEnemyHealth - enemy_hero:GetHealth())*2
+    bot.lastEnemyHealth = enemy_hero:GetHealth()
+
+    -- Reward for attacking enemy TOWER
+    bot.Reward = (bot.lastEnemyTowerHealth - enemyTower:GetHealth())*5
+    bot.lastEnemyTowerHealth = enemyTower:GetHealth()
+
     local distance_to_mid = GetUnitToLocationDistanceSqr(bot, Vector(-450, -450))
-    bot.lastReward = bot.lastReward - distance_to_mid * 0.00001
+    bot.lastReward = bot.lastReward - distance_to_mid * 0.001
 
     if #bot:GetNearbyLaneCreeps(500, true) > 0 then
-      bot.lastReward = bot.lastReward + 0.3
+      bot.lastReward = bot.lastReward + 10
     end
   end
 end
