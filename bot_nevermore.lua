@@ -45,27 +45,36 @@ end
 
 -- example Act function that talk with machine learning server
 function Act()
+  -- if bot:GetTeam() == TEAM_DIRE then return end
   local loc = bot:GetLocation()
-  print(bot:GetTeam())
   if not bot.lastAction then bot.lastAction = 0 end
   if not bot.lastActionTime then bot.lastActionTime = 0 end
   if not bot.actionQueue then bot.actionQueue = {} end
   if not bot.lastReward then bot.lastReward = 0 end
   if not bot.lastHealth then bot.lastHealth = bot:GetHealth() end
   if bot.waitingRes == nil then bot.waitingRes = false end
+  if not bot.frame then bot.frame = 0 end
+
+  bot.frame = bot.frame + 1
 
   if #bot.actionQueue > 0 then
+    bot.frame = 0
     local action = table.remove(bot.actionQueue, 1)
     moves[action](bot)
     bot.lastAction = action
     return
   end
 
-  if not bot.waitingRes then
+
+  if not bot.waitingRes and bot.frame >= 7 then
     local velocity = bot:GetVelocity()
     local facing = bot:GetVelocity()
-    print(bot:GetAnimActivity())
+    local nearbyEnemyTowers = bot:GetNearbyTowers(700, true)
+    local nearbyAlliedTowers = bot:GetNearbyTowers(700, false)
+    local nearbyEnemyCreeps = bot:GetNearbyCreeps(700, true)
+    local nearbyAlliedCreeps = bot:GetNearbyCreeps(700, false)
     bot.waitingRes = true
+    local start = RealTime()
     request:Send({
       team = bot:GetTeam(),
       isAlive = bot:IsAlive(),
@@ -76,23 +85,32 @@ function Act()
       heroFacing = bot:GetFacing(),
       heroAnimation = bot:GetAnimActivity(),
       health = bot:GetHealth(),
-      reward = bot.lastReward
+      numberOfNearbyEnemyTowers = #nearbyEnemyTowers,
+      numberOfNearbyAlliedTowers = #nearbyAlliedTowers,
+      numberOfNearbyEnemyCreeps = #nearbyEnemyCreeps,
+      numberOfNearbyAlliedCreeps = #nearbyAlliedCreeps,
+      dotaTime = DotaTime(),
+      reward = bot.lastReward,
+      frame = bot.frame,
     }, function(res)
       table.insert(bot.actionQueue, res.action)
       bot.waitingRes = false
     end)
+    bot.frame = 0
 
     bot.lastReward = 0
 
     -- Punish when took damage
-    bot.lastReward = bot:GetHealth() - bot.lastHealth
+    if bot.lastHealth > bot:GetHealth() then
+      bot.lastReward = bot.lastReward - 100
+    end
     bot.lastHealth = bot:GetHealth()
 
     local distance_to_mid = GetUnitToLocationDistanceSqr(bot, Vector(-450, -450))
     bot.lastReward = bot.lastReward - distance_to_mid * 0.00001
 
     if #bot:GetNearbyLaneCreeps(500, true) > 0 then
-      bot.lastReward = bot.lastReward + 0.3
+      bot.lastReward = bot.lastReward + 100
     end
   end
 end
