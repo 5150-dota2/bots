@@ -1,5 +1,5 @@
 local dkjson = require( "game/dkjson" )
-local utils = require(GetScriptDirectory() .. "/utils")
+local utils = require("bots/" .. "/utils")
 
 local request = {}
 
