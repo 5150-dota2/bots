@@ -1,3 +1,5 @@
+local utils = require(GetScriptDirectory() .. "/utils")
+
 local val = 250
 
 local function DoNothing(bot)
@@ -50,6 +52,25 @@ local function DownRight(bot)
   bot:Action_MoveDirectly(Vector(loc.x + val, loc.y - val))
 end
 
+local function Attack(bot)
+  local enemyCreeps = bot:GetNearbyCreeps(450, true)
+  if #enemyCreeps == 0 then return end
+
+  local lowestHealth = 10000
+  local toBeAttack = nil
+
+  for i, creep in pairs(enemyCreeps) do
+    if creep ~= nil then
+      if creep:GetHealth() < lowestHealth then
+        toBeAttack = creep
+        lowestHealth = creep:GetHealth()
+      end
+    end
+  end
+
+  bot:Action_AttackUnit(toBeAttack, true)
+end
+
 -- local moves = {
 --   Stop = Stop,
 --   Up = Up,
@@ -71,6 +92,7 @@ local moves = {
   UpRight,
   DownLeft,
   DownRight,
+  Attack
 }
 
 return moves
