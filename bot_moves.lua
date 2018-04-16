@@ -51,27 +51,90 @@ local function DownRight(bot)
 end
 
 local function normal_attack_creep(bot)
-  local nevermore_module = require("bot_creep_to_attack")
-  local creep_to_attack = nevermore_module.getcreep(bot)
-  bot:Action_AttackUnit(creep_to_attack, true)
+  -- local nevermore_module = require("bots/" .. "bot_creep_to_attack")
+  -- local creep_to_attack = nevermore_module.getcreep(bot)
+
+  local ecta = nil
+  local enemy_creeps = bot:GetNearbyCreeps(1599, true)
+  if #enemy_creeps == 0 then return end
+  local leasthealth = 99999
+  for k,eu in pairs(enemy_creeps) do
+    if eu ~= nil then
+      if eu:GetHealth() < leasthealth then
+        ecta = eu
+        leasthealth = eu:GetHealth()
+      end
+    end
+  end
+  print("ecta-------------",ecta:GetUnitName())
+
+  print("ahiya aavi ne gayu")
+  print("normal attack**********************",ecta:GetUnitName())
+  if ecta == nil then return end
+  bot:Action_AttackUnit(ecta, false)
 end
 
 local function raze_200(bot)
-  local nevermore_module = require("bot_creep_to_attack")
-  local creep_to_attack = nevermore_module.getcreep(bot)
-  bot:Action_UseAbilityOnLocation(nevermore_shadowraze1, creep_to_attack:GetLocation())
+  local ecta = nil
+  local enemy_creeps = bot:GetNearbyCreeps(1599, true)
+  if #enemy_creeps == 0 then return end
+  local leasthealth = 99999
+  for k,eu in pairs(enemy_creeps) do
+    if eu ~= nil then
+      if eu:GetHealth() < leasthealth then
+        ecta = eu
+        leasthealth = eu:GetHealth()
+      end
+    end
+  end
+  print("ecta-------------",ecta:GetUnitName())
+
+  print("ahiya aavi ne gayu------200----")
+  print("raze200**********************",ecta:GetUnitName())
+  if ecta == nil then return end
+  bot:Action_UseAbilityOnLocation("nevermore_shadowraze1", ecta:GetLocation())
 end
 
 local function raze_450(bot)
-  local nevermore_module = require("bot_creep_to_attack")
-  local creep_to_attack = nevermore_module.getcreep(bot)
-  bot:Action_UseAbilityOnLocation(nevermore_shadowraze2, creep_to_attack:GetLocation())
+  local ecta = nil
+  local enemy_creeps = bot:GetNearbyCreeps(1599, true)
+  if #enemy_creeps == 0 then return end
+  local leasthealth = 99999
+  for k,eu in pairs(enemy_creeps) do
+    if eu ~= nil then
+      if eu:GetHealth() < leasthealth then
+        ecta = eu
+        leasthealth = eu:GetHealth()
+      end
+    end
+  end
+  print("ecta-------------",ecta:GetUnitName())
+
+  print("ahiya aavi ne gayu------450----")
+  print("raze450**********************",ecta:GetUnitName())
+  if ecta == nil then return end
+  bot:Action_UseAbilityOnLocation("nevermore_shadowraze2", ecta:GetLocation())
 end
 
 local function raze_700(bot)
-  local nevermore_module = require("bot_creep_to_attack")
-  local creep_to_attack = nevermore_module.getcreep(bot)
-  bot:Action_UseAbilityOnLocation(nevermore_shadowraze3, creep_to_attack:GetLocation())
+  local ecta = nil
+  local enemy_creeps = bot:GetNearbyCreeps(1599, true)
+  if #enemy_creeps == 0 then return end
+  local leasthealth = 99999
+  for k,eu in pairs(enemy_creeps) do
+    if eu ~= nil then
+      if eu:GetHealth() < leasthealth then
+        ecta = eu
+        leasthealth = eu:GetHealth()
+      end
+    end
+  end
+  print("ecta-------------",ecta:GetUnitName())
+
+  print("ahiya aavi ne gayu------700----")
+  print("raze700**********************",ecta:GetUnitName())
+  if ecta == nil then return end
+  bot:Action_UseAbilityOnLocation("nevermore_shadowraze3", ecta:GetLocation())
 end
 
 local function normal_attack_bot(bot)

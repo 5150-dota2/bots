@@ -1,20 +1,19 @@
 local bot_creep_to_attack = {}
 
 function bot_creep_to_attack.getcreep(bot)
-  local ecta
-  local enemy_creeps = bot:GetNearbyLaneCreeps(500, true)
-  local hits_table = {}
+  local ecta = nil
+  local enemy_creeps = bot:GetNearbyCreeps(1599, true)
+  if #enemy_creeps == 0 then return end
+  local leasthealth = 99999
   for k,eu in pairs(enemy_creeps) do
-    number_of_hits = (eu:GetHealth()/bot:GetAttackDamage())
-    table.insert(hits_table, eu,  number_of_hits)
-  end
-  local least_hits = math.max(x, 999);
-  for eu,k in ipairs(hits_table) do
-    if(k < least_hits) then
-      least_hits = k
-      ecta = eu
+    if eu ~= nil then
+      if eu:GetHealth() < leasthealth then
+        ecta = eu
+        leasthealth = eu:GetHealth()
+      end
     end
   end
+  -- print("ecta-------------",ecta:GetUnitName())
   return ecta
 end
 
