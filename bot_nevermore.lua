@@ -10,40 +10,9 @@ function Think()
   local location = bot:GetLocation()
   bot:ActionImmediate_Chat(string.format("Location: %f, %f", location.x, location.y), false)
   Act()
-
-  -- Moving to lane
-  -- if DotaTime() < 0 then
-  --   local midTower = GetTower(bot:GetTeam(), TOWER_MID_1)
-  --   local midTowerLoc = midTower:GetLocation()
-  --   bot:Action_MoveDirectly(midTowerLoc)
-  --   return
-  -- else
-  --   Act()
-  -- end
 end
 
 
--- function Act()
---   local loc = bot:GetLocation()
---   local m = {}
---   local a = {}
---
---   -- for k in pairs(moves) do
---   --   table.insert(m, k)
---   -- end
---
---   for k in pairs(attack) do
---     table.insert(a, k)
---   end
---   --
---   if not bot.lastActionTime then bot.lastActionTime = 0 end
---
---   if RealTime() - bot.lastActionTime > 0.2 then
---     bot.lastActionTime = RealTime()
---     attack[a[1]](bot)
---     -- moves[m[math.random(#m)]](bot)
---   end
--- end
 
 -- example Act function that talk with machine learning server
 function Act()
@@ -60,13 +29,6 @@ function Act()
 
 
   bot.frame = bot.frame + 1
-
-  -- if bot.frame >= 7 then
-  --   moves[9](bot)
-  --   bot.frame = 0
-  -- end
-  --
-  -- if true then return end
 
   if #bot.actionQueue > 0 then
     bot.frame = 0
@@ -150,7 +112,6 @@ function Act()
 
     local animation = bot:GetAnimActivity()
     if animation == ACTIVITY_ATTACK or animation == ACTIVITY_ATTACK2 or animation == ACTIVITY_ATTACK_EVENT then
-      print("reward when attack")
       bot.lastReward = bot.lastReward + 100
     end
 
