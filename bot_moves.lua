@@ -53,7 +53,7 @@ local function DownRight(bot)
 end
 
 local function Attack(bot)
-  local enemyCreeps = bot:GetNearbyCreeps(550, true)
+  local enemyCreeps = bot:GetNearbyCreeps(650, true)
   if #enemyCreeps == 0 then return end
 
   local lowestHealth = 10000
