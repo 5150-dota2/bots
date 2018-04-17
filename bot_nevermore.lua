@@ -12,8 +12,6 @@ function Think()
   Act()
 end
 
-
-
 -- example Act function that talk with machine learning server
 function Act()
   if bot:GetTeam() == TEAM_DIRE then return end
@@ -88,23 +86,19 @@ function Act()
       bot.lastReward = bot.lastReward - ((attackingCreepCount * 70) + (attackingTowerCount * 200))
     end
 
-
-
     local desired = Vector(-1544/2, -1408/2)
-    local cir = Vector(1544/2, 1408/2)
     local red = (bot:GetTeam() == TEAM_RADIANT) and 0 or 255
     local green = (bot:GetTeam() == TEAM_RADIANT) and 255 or 0
 
     -- Draw the desired location on the ground, green for Radiant, red for Dire
     DebugDrawCircle(desired, 20, red, green, 0)
-    DebugDrawCircle(cir, 20, red, green, 0)
 
     local distance_to_mid = GetUnitToLocationDistanceSqr(bot, desired)
     bot.lastReward = bot.lastReward - distance_to_mid * 0.00001
 
     local animation = bot:GetAnimActivity()
     if animation == ACTIVITY_ATTACK or animation == ACTIVITY_ATTACK2 or animation == ACTIVITY_ATTACK_EVENT then
-      bot.lastReward = bot.lastReward + 100
+      bot.lastReward = bot.lastReward + 130
     end
 
     if animation == ACTIVITY_IDLE or animation == ACTIVITY_IDLE_RARE then
