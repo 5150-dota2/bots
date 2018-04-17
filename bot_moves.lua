@@ -1,6 +1,6 @@
 local utils = require(GetScriptDirectory() .. "/utils")
 
-local val = 250
+local val = 500
 
 local function DoNothing(bot)
   local loc = bot:GetLocation()
@@ -53,7 +53,7 @@ local function DownRight(bot)
 end
 
 local function Attack(bot)
-  local enemyCreeps = bot:GetNearbyCreeps(450, true)
+  local enemyCreeps = bot:GetNearbyCreeps(550, true)
   if #enemyCreeps == 0 then return end
 
   local lowestHealth = 10000
